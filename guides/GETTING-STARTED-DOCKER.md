@@ -16,7 +16,7 @@ Para ello te recomendamos seguir los pasos a continuación:
 
 ## 1. Instalar `docker` y `docker-compose`
 
-Independientemente de qué base datos elijas, en este proyecto vamos a ejecutar
+Independientemente dequé base datos elijas, en este proyecto vamos a ejecutar
 localmente (en nuestra computadora) el servidor de bases de datos usando
 _contenedores_ de Docker en vez de instalar el programa directamente en nuestra
 computadora. Además vamos a usar también la herramienta `docker-compose` para

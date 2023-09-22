@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Products {
+  id        Int               @id @default(autoincrement())
+  name      String            @unique
+  price     Float // decimal
+  image     String? //?---> La img es opcional Puede contener una ruta o URL que apunta a la imagen del producto
+  type      String? // Categoria del producto
+  craetedAt DateTime          @default(now())
+  dateEntry DateTime          @updatedAt //  Registra la fecha y hora de la última actualización del registro del producto.
+
+}
+
+model orders_products {
+  name  String  @unique
+  price Float
+  image String?
+  type  String?
+}
