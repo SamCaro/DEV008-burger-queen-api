@@ -1,12 +1,12 @@
-import { PrismaClient } from '@prisma/client'
+const { PrismaClient } = require('@prisma/client');
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
 
 module.exports = {
-  getProducts: async (req, res, next) => {
+  getProducts: async (req, resp, next) => {
     try {
       const products = await prisma.product.findMany();
-      res.json(products);
+      return resp.json(products);
     } catch (error) {
       next(error);
     }

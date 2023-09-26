@@ -10,20 +10,51 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Products {
-  id        Int               @id @default(autoincrement())
-  name      String            @unique
-  price     Float // decimal
-  image     String? //?---> La img es opcional Puede contener una ruta o URL que apunta a la imagen del producto
-  type      String? // Categoria del producto
-  craetedAt DateTime          @default(now())
-  dateEntry DateTime          @updatedAt //  Registra la fecha y hora de la última actualización del registro del producto.
+model users {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  role     Role
+  orders   orders[]
+}
 
+enum Role {
+  Admin
+  Waiter
+  Chef
+}
+
+model orders {
+  id       Int               @id @default(autoincrement())
+  userId   Int               @unique
+  client   String
+  products orders_products[]
+  users    users             @relation(fields: [userId], references: [id])
 }
 
 model orders_products {
-  name  String  @unique
-  price Float
-  image String?
-  type  String?
+  id        Int      @id @default(autoincrement())
+  orderId   Int
+  productId Int
+  qty       Int
+  products  Products @relation(fields: [productId], references: [id])
+  orders    orders   @relation(fields: [orderId], references: [id])
+}
+
+enum orders_status {
+  Pending
+  Canceled
+  Delivering
+  Delivered
+}
+
+model Products {
+  id              Int               @id @default(autoincrement())
+  name            String            @unique
+  price           Float // decimal
+  image           String? //?---> La img es opcional Puede contener una ruta o URL que apunta a la imagen del producto
+  type            String? // Categoria del producto
+  craetedAt       DateTime          @default(now())
+  dateEntry       DateTime          @updatedAt //  Registra la fecha y hora de la última actualización del registro del producto.
+  orders_products orders_products[]
 }
