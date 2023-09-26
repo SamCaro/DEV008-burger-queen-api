@@ -1,10 +1,13 @@
-const config = require('./config');
-
-// eslint-disable-next-line no-unused-vars
-const { dbUrl } = config;
+const { dbUrl } = require('./config');
 
 async function connect() {
-  // TODO: Conexión a la Base de Datos
+  try {
+    await dbUrl.$connect();
+    console.info('Conexión con la base de datos exitosa.');
+  } catch (error) {
+    console.error('Error no se establecido conexión con la base de datos', error);
+    throw error;
+  }
 }
 
 module.exports = { connect };
