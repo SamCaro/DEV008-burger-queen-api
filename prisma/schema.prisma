@@ -16,6 +16,7 @@ model users {
   password String
   role     Role
   orders   orders[]
+  isActive Boolean @default(true) 
 }
 
 enum Role {
@@ -30,6 +31,7 @@ model orders {
   client   String
   products orders_products[]
   users    users             @relation(fields: [userId], references: [id])
+  isActive Boolean           @default(true)
 }
 
 model orders_products {
@@ -39,6 +41,7 @@ model orders_products {
   qty       Int
   products  Products @relation(fields: [productId], references: [id])
   orders    orders   @relation(fields: [orderId], references: [id])
+  isActive  Boolean  @default(true)
 }
 
 enum orders_status {
@@ -56,5 +59,6 @@ model Products {
   type            String? // Categoria del producto
   craetedAt       DateTime          @default(now())
   dateEntry       DateTime          @updatedAt //  Registra la fecha y hora de la última actualización del registro del producto.
+  isActive        Boolean           @default(true)
   orders_products orders_products[]
 }
