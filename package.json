@@ -14,13 +14,18 @@
     "test": "npm run test:e2e && npm run test:unit",
     "lint": "eslint .",
     "docs:generate": "jsdoc -c jsdoc.conf --readme README-docs.md",
-    "docs:deploy": "rm -rf docs && npm run docs:generate && gh-pages -d docs"
+    "docs:deploy": "rm -rf docs && npm run docs:generate && gh-pages -d docs",
+    "migrate": "npm run migrate-and-seed",
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts",
+    "migrate-and-seed": "npx prisma migrate dev && npm run seed"
   },
   "dependencies": {
     "@prisma/client": "^5.3.1",
     "@shelf/jest-mongodb": "^4.1.7",
     "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
@@ -28,6 +33,8 @@
     "pg": "^8.11.3"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/node": "^20.8.0",
     "docdash": "^1.2.0",
     "eslint": "^8.50.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -38,7 +45,9 @@
     "jsdoc-http-plugin": "^0.3.2",
     "node-fetch": "^3.1.0",
     "prisma": "^5.3.1",
-    "tree-kill": "^1.2.2"
+    "tree-kill": "^1.2.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.2.2"
   },
   "bootcamp": {
     "createdAt": "2023-08-22T01:15:22.119Z",

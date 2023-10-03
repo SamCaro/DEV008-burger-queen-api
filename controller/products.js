@@ -1,3 +1,4 @@
+/* eslint-disable radix */
 const { PrismaClient } = require('@prisma/client');
 
 const prisma = new PrismaClient();
@@ -9,6 +10,14 @@ module.exports = {
         where: {
           isActive: true,
         },
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          image: true,
+          type: true,
+          createdAt: true,
+        },
       });
       resp.status(200).json(products);
     } catch (error) {
@@ -17,42 +26,52 @@ module.exports = {
   },
 
   getProductById: async (req, resp, next) => {
-    const { _id } = req.params;
+    const { id: productId } = req.params;
     try {
-      const getById = await prisma.product.findUnique({
-        where: {
-          id: _id,
-          isActive: true,
-        },
+      const product = await prisma.products.findUnique({
+        where: { id: parseInt(productId) },
       });
-      resp.status(200).json(getById);
+
+      if (!product) {
+        resp.status(404).json({ message: 'Product Not Found' });
+      }
+
+      resp.status(200).json(product);
     } catch (error) {
       next(error);
     }
   },
 
   createProduct: async (req, resp, next) => {
-    const newProduct = req.body;
+    const {
+      name, price, image, type,
+    } = req.body;
     try {
-      const createdProduct = await prisma.products.create({
-        data: newProduct,
+      const newProduct = await prisma.products.create({
+        data: {
+          name,
+          price,
+          image,
+          type,
+        },
       });
-      resp.status(200).json(createdProduct);
+
+      resp.status(201).json(newProduct);
     } catch (error) {
       next(error);
     }
   },
 
   updateProduct: async (req, resp, next) => {
-    const { _id } = req.params;
+    const { id: productId } = req.params;
     try {
       const {
         name, price, image, type,
       } = req.body;
 
-      const updatedProduct = await prisma.product.update({
+      const updatedProduct = await prisma.products.update({
         where: {
-          id: _id,
+          id: parseInt(productId),
         },
         data: {
           name,
@@ -69,12 +88,10 @@ module.exports = {
   },
 
   deleteProduct: async (req, resp, next) => {
-    const { _id } = req.params;
+    const { id: productId } = req.params;
     try {
       const inactiveProduct = await prisma.products.update({
-        where: {
-          id: _id,
-        },
+        where: { id: parseInt(productId) },
         data: {
           isActive: false,
         },
@@ -85,13 +102,13 @@ module.exports = {
       } else {
         resp.status(200).json({
           product: {
-            id: _id.toString(),
+            id: inactiveProduct.id,
             isActive: false,
             name: inactiveProduct.name,
             price: inactiveProduct.price,
             image: inactiveProduct.image,
             type: inactiveProduct.type,
-            dateEntry: inactiveProduct.dateEntry.toISOString(),
+            updateAt: inactiveProduct.updateAt.toISOString(),
           },
           message: 'Eliminación exitosa',
         });

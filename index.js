@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const config = require('./config');
 const authMiddleware = require('./middleware/auth');
 const errorHandler = require('./middleware/error');
@@ -18,6 +19,12 @@ app.use(express.urlencoded({ extended: false })); // use ---> son los middleware
 app.use(express.json());
 app.use(authMiddleware(secret));
 
+const corsOptions = {
+  Credential: true,
+};
+// comunica el servidor con otros servidores
+app.use(cors(corsOptions));
+
 // Registrar rutas
 routes(app, (err) => {
   if (err) {
@@ -26,7 +33,7 @@ routes(app, (err) => {
 
   app.use(errorHandler);
 
-  // endpoint ---> es la ruta que acepta solicitudes y devuelve respuestas, 
+  // endpoint ---> es la ruta que acepta solicitudes y devuelve respuestas,
   // forma en q se comunican las apps
   app.listen(port, () => {
     console.info(`App listening on port ${port}`);
