@@ -115,8 +115,6 @@ module.exports = () => new Promise((resolve, reject) => {
     stdio: ['ignore', 'pipe', 'pipe'],
   });
 
-
-
   Object.assign(__e2e, { childProcessPid: child.pid });
 
   child.stdout.on('data', (chunk) => {
